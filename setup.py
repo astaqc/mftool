@@ -8,13 +8,13 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 setup(
     name="mftool",
     version="1.1",
-    author="Sujit Nayakwadi",
-    author_email="nayakwadi.sujit@gmail.com",
+    author="Avanish Pandey",
+    author_email="ap@astaqc.com",
     description="Python library for extracting realtime Mutual funds data from AMFI (India)",
     license="MIT",
     keywords="amfi, quote, mutual-funds, funds, bse, nse, market, stock, stocks",
-    install_requires=['requests','bs4'],
-    url="https://github.com/NayakwadiS/mftool",
+    install_requires=['requests','bs4','sqlalchemy'],
+    url="https://github.com/astaqc/mftool",
     packages=find_packages(),
 	long_description = long_description,
 	long_description_content_type='text/markdown'
