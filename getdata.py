@@ -6,7 +6,7 @@ import datetime
 import time
 
 print('Initializing Database connection')
-dbconnection.DBSession.initdsn("postgres:admin@123@localhost/dailynav")
+dbconnection.DBSession.initdsn("postgres:rxQMb6paqFxy3XVbmNNa@database-1.cdrbbb6icmrj.us-east-2.rds.amazonaws.com:5432/database-1")
 
 #get all scheme codes
 def save_all_scheme_codes():
