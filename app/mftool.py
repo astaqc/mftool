@@ -39,7 +39,7 @@ class Mftool():
         self._get_quote_url = self._const['get_quote_url']
         self._get_scheme_url = self._const['get_scheme_url']
         self._get_amc_details_url = self._const['get_amc_details_url']
-        self._get_fund_ranking = self._const['get_fund_ranking']
+        # self._get_fund_ranking = self._const['get_fund_ranking']
         self._get_open_ended_equity_scheme_url = self._const['get_open_ended_equity_scheme_url']
         self._open_ended_equity_category = self._const['open_ended_equity_category']
         self._open_ended_debt_category = self._const['open_ended_debt_category']
