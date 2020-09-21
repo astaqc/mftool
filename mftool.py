@@ -60,6 +60,30 @@ class Mftool():
         """
         self._session.proxies = proxy
 
+    def get_all_scheme_quote(self, as_json=False):
+        """
+        gets the quote for a given scheme code
+        :param code: scheme code
+        :return: dict or None
+        :raises: HTTPError, URLError
+        """
+
+        all_scheme_data = []
+        url = self._get_quote_url
+        response = self._session.get(url)
+        data = response.text.split("\n")
+        for scheme_data in data:
+            scheme_info = {}
+            if ";INF" in scheme_data:
+                scheme = scheme_data.split(";")
+                scheme_info['scheme_code'] = scheme[0]
+                scheme_info['scheme_name'] = scheme[3]
+                scheme_info['last_updated'] = scheme[5].replace("\r", "")
+                scheme_info['nav'] = scheme[4]
+                all_scheme_data.append(scheme_info)
+        return self.render_response(all_scheme_data, as_json)
+
+
     def get_scheme_codes(self, as_json=False):
         """
         returns a dictionary with key as scheme code and value as scheme name.
@@ -124,19 +148,21 @@ class Mftool():
         :return: dict or None
         :raises: HTTPError, URLError
         """
+        i=0;
         code = str(code)
         if self.is_valid_code(code):
             scheme_info = {}
             url = self._get_scheme_url+code
             response = self._session.get(url).json()
             scheme_data = response['meta']
-            scheme_info['fund_house'] = scheme_data['fund_house']
-            scheme_info['scheme_type'] = scheme_data['scheme_type']
-            scheme_info['scheme_category'] = scheme_data['scheme_category']
-            scheme_info['scheme_code'] = scheme_data['scheme_code']
-            scheme_info['scheme_name'] = scheme_data['scheme_name']
-            scheme_info['scheme_start_date'] = response['data'][int(len(response['data']) -1)]
+            scheme_info['fund_house'] = scheme_data['fund_house'] if 'fund_house' in scheme_data else "N/A"
+            scheme_info['scheme_type'] = scheme_data['scheme_type'] if 'scheme_type' in scheme_data else "N/A"
+            scheme_info['scheme_category'] = scheme_data['scheme_category'] if 'scheme_category' in scheme_data else "N/A"
+            scheme_info['scheme_code'] = scheme_data['scheme_code'] if 'scheme_code' in scheme_data else "0000"+i
+            scheme_info['scheme_name'] = scheme_data['scheme_name'] if 'scheme_name' in scheme_data else "N/A"
+            scheme_info['scheme_start_date'] = response['data'][int(len(response['data']) -1)] 
             return self.render_response(scheme_info, as_json)
+            i+=1
         else:
             return None
 

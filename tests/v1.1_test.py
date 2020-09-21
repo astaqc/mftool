@@ -1,4 +1,3 @@
-
 fund_performance = []
 
 html = requests.get('')
