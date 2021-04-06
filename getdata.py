@@ -19,7 +19,7 @@ def save_all_scheme_codes():
             scheme_code =  create_scheme_code(scheme_codes)
             rows.append(scheme_code)
         except Exception as ex:  
-            print (scheme_codes)         
+            print (scheme_codes)     
             print (ex)
     for row in rows:
         save_to_database_bulk([row], 5000)
@@ -34,8 +34,8 @@ def save_nav_data_daily():
     for data in all_schemes_nav:       
         try:
             data['last_updated'] = datetime.datetime.strptime(data['last_updated'], '%d-%b-%Y')
-            nav = create_nav(data)             
-            rows.append(nav)                                                    
+            nav = create_nav(data)
+            rows.append(nav)
         except Exception as ex:  
             print (data)         
             print (ex)
@@ -72,24 +72,25 @@ def save_nav_data_historical():
     mftool = mf.Mftool()
     schemes = mftool.get_scheme_codes()
 
-    for scheme_code, scheme_name in schemes.items():
+    for scheme_code, scheme_name in sorted(schemes.items(), key= lambda x:x[0].lower(), reverse=True):
 
         print('Downloading data for ', scheme_name)
         historical_data = mftool.get_scheme_historical_nav(scheme_code)
         
         rows = []
         for data in historical_data['data']:
-            try:
-                print(data['date'])
-                new_row = {}
-                new_row['scheme_code'] = historical_data['scheme_code']
-                new_row['scheme_name']= historical_data['scheme_name']
-                new_row['last_updated']= datetime.datetime.strptime(data['date'], '%d-%m-%Y')
-                new_row['nav'] = float(data['nav'])
-                rows.append(create_nav(new_row))
-            except Exception as ex:
-                print (data)         
-                print (ex)
+            if historical_data['scheme_code'] is not None and historical_data['scheme_name'] is not None and data['nav'] is not None :
+                try:
+                    print(data['date'])
+                    new_row = {}
+                    new_row['scheme_code'] = historical_data['scheme_code']
+                    new_row['scheme_name']= historical_data['scheme_name']
+                    new_row['last_updated']= datetime.datetime.strptime(data['date'], '%d-%m-%Y')
+                    new_row['nav'] = float(data['nav'])
+                    rows.append(create_nav(new_row))
+                except Exception as ex:
+                    print (data)         
+                    print (ex)
         
         save_to_database_bulk(rows, 3000)
         print('Sleeping for 10 seconds')
@@ -148,6 +149,6 @@ print('Started')
 if __name__ == "__main__":
 
     #save_nav_data_daily()
-    save_nav_data_historical()
+    #save_nav_data_historical()
     #save_all_schemes()
     #save_all_scheme_codes()
